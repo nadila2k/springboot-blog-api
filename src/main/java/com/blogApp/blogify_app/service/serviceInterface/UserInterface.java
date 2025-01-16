@@ -10,6 +10,8 @@ public interface UserInterface {
     AppUser addUser(UserDto userDto);
     AppUser updateUser(UserDto userDto,long id);
 
+
+
     void  deleteUser(long id);
     List<AppUser> getAllUser();
 }

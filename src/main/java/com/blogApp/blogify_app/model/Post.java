@@ -10,7 +10,6 @@ import java.util.List;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Post {
 
@@ -19,6 +18,8 @@ public class Post {
     private long id;
     private String title;
     private String content;
+    private String public_Id;
+    private String url;
 
     @ManyToOne
     @JoinColumn(
@@ -27,8 +28,7 @@ public class Post {
     )
     private Category category;
 
-    @OneToOne(mappedBy = "post")
-    private Image image;
+
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
@@ -39,5 +39,13 @@ public class Post {
     referencedColumnName = "id")
     private AppUser appUser;
 
-
+    public Post(long id, String title, String content, Category category, String url, String public_Id, AppUser appUser) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.category = category;
+        this.url = url;
+        this.public_Id = public_Id;
+        this.appUser = appUser;
+    }
 }
