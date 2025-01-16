@@ -25,7 +25,7 @@ public class AppUser {
     private List<Post> posts;
 
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
+    private List<Comments> comments;
 
     public AppUser(long id, String userName, String email, String password) {
         this.id = id;

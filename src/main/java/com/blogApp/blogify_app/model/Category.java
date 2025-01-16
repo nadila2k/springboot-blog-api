@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Category {
@@ -17,6 +16,11 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+
+    public Category(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     @OneToMany(mappedBy = "category")
     private List<Post> posts;

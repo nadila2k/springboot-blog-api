@@ -111,7 +111,7 @@ public class PostService implements PostInterface {
 
     @Override
     public void deletePost(long id) {
-
+        postRepo.findById(id).ifPresentOrElse(postRepo::delete,() -> { throw new NoSuchElementException("Post Not Found");});
     }
 
     public Post post(PostDto postDto , Category category, AppUser appUser){
