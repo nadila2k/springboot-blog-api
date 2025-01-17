@@ -18,7 +18,9 @@ public class UserService implements UserInterface {
 
     @Override
     public AppUser addUser(UserDto userDto) {
-
+        if (userRepo.existsByEmail(userDto.getEmail())) {
+           throw new IllegalArgumentException("Email is already in use");
+        }
         return userRepo.save(convertToAppUser(userDto));
     }
 

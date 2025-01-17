@@ -31,7 +31,7 @@ public class Post {
 
 
     @OneToMany(mappedBy = "post")
-    private List<Comment> comments;
+    private List<Comments> comments;
 
     @ManyToOne
     @JoinColumn(

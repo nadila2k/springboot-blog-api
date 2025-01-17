@@ -17,6 +17,9 @@ public class CategoryService implements CategoryInterface {
     private final CategoryRepo categoryRepo;
     @Override
     public Category addcategory(CategoryDto categoryDto) {
+        if (categoryRepo.existsByName(categoryDto.getName())) {
+            throw new IllegalArgumentException("Category is already in use");
+        }
         return categoryRepo.save(categoryReq(categoryDto));
     }
 
