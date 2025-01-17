@@ -8,17 +8,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class PostDto {
-
+@AllArgsConstructor
+public class ResponsePostDto {
     private long id;
     private String title;
     private String content;
     private String public_Id;
     private String url;
-    private Category category;
-    private AppUser appUser;
-
+    private CategoryDto category;
+    private UserDto appUser;
 }

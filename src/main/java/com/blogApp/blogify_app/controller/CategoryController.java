@@ -50,6 +50,7 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<ApiResponse> getAllCategory(){
+
         return ResponseEntity.ok().body(new ApiResponse("",categoryInterface.getAllCategory()));
     }
 }

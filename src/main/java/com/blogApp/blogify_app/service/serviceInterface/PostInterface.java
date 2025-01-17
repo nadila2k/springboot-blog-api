@@ -1,6 +1,7 @@
 package com.blogApp.blogify_app.service.serviceInterface;
 
 import com.blogApp.blogify_app.dto.PostDto;
+import com.blogApp.blogify_app.dto.ResponsePostDto;
 import com.blogApp.blogify_app.model.Post;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,14 +10,14 @@ import java.util.List;
 
 public interface PostInterface {
 
-    List<Post> getAllPost();
+    List<ResponsePostDto> getAllPost();
 
-     Post addPost(PostDto postDto, MultipartFile image) throws IOException;
+    ResponsePostDto addPost(PostDto postDto, MultipartFile image) throws IOException;
 
 
-    Post updatePost(PostDto postDto, long id);
+    ResponsePostDto updatePost(PostDto postDto, long id);
 
-    Post updatePost(PostDto postDto, long id, MultipartFile file) throws IOException;
+    ResponsePostDto updatePost(PostDto postDto, long id, MultipartFile file) throws IOException;
 
     void deletePost(long id);
 }

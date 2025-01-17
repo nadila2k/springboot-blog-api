@@ -1,7 +1,10 @@
 package com.blogApp.blogify_app.service;
 
 import com.blogApp.blogify_app.config.CloudinaryConfig;
+import com.blogApp.blogify_app.dto.CategoryDto;
 import com.blogApp.blogify_app.dto.PostDto;
+import com.blogApp.blogify_app.dto.ResponsePostDto;
+import com.blogApp.blogify_app.dto.UserDto;
 import com.blogApp.blogify_app.model.AppUser;
 import com.blogApp.blogify_app.model.Category;
 import com.blogApp.blogify_app.model.Post;
@@ -28,14 +31,34 @@ public class PostService implements PostInterface {
     private final CloudinaryConfig cloudinary;
 
     @Override
-    public List<Post> getAllPost() {
-        return postRepo.findAll();
+    public List<ResponsePostDto> getAllPost() {
+        return postRepo.findAll().stream()
+                .map(this::responsePostDto)
+                .toList();
     }
 
 
 
+    public ResponsePostDto responsePostDto(Post post) {
+        return ResponsePostDto.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .url(post.getUrl())
+                .public_Id(post.getPublic_Id())
+                .category(new CategoryDto(post.getCategory().getId(), post.getCategory().getName()))
+                .appUser(new UserDto(post.getAppUser().getId(),
+                        post.getAppUser().getUserName(),
+                        post.getAppUser().getEmail(),
+                        post.getAppUser().getPassword()))
+                .build();
+    }
+
+
+
+
     @Override
-    public Post addPost(PostDto postDto, MultipartFile image) throws IOException {
+    public ResponsePostDto addPost(PostDto postDto, MultipartFile image) throws IOException {
 
         Category category = categoryRepo.findById(postDto.getCategory().getId()).orElseThrow(()-> new NoSuchElementException("Not Found Category"));
         AppUser user =  userRepo.findById(postDto.getAppUser().getId())
@@ -44,11 +67,11 @@ public class PostService implements PostInterface {
         Map imageDetailes = cloudinary.cloudinary().uploader().upload(image.getBytes(),Map.of());
         postDto.setPublic_Id(imageDetailes.get("public_id").toString());
         postDto.setUrl(imageDetailes.get("url").toString());
-        return postRepo.save(post(postDto,category,user));
+        return responsePostDto(postRepo.save(post(postDto,category,user)));
     }
 
     @Override
-    public Post updatePost(PostDto postDto, long id) {
+    public ResponsePostDto updatePost(PostDto postDto, long id) {
 
 
         Category category = categoryRepo.findById(postDto.getCategory().getId()).orElseThrow(()-> new NoSuchElementException("Not Found Category"));
@@ -58,13 +81,13 @@ public class PostService implements PostInterface {
 
         return postRepo.findById(id).map(
                 post -> {
-                    return getPost(postDto, category, user, post);
+                    return responsePostDto(getPost(postDto, category, user, post));
                 }
         ).orElseThrow(() -> new NoSuchElementException("Post Not Found "));
     }
 
     @Override
-    public Post updatePost(PostDto postDto, long id, MultipartFile file) throws IOException {
+    public ResponsePostDto updatePost(PostDto postDto, long id, MultipartFile file) throws IOException {
 
 
         Category category = categoryRepo.findById(postDto.getCategory().getId()).orElseThrow(()-> new NoSuchElementException("Not Found Category"));
@@ -92,7 +115,7 @@ public class PostService implements PostInterface {
                     postDto.setPublic_Id(imageDetails.get("public_id").toString());
                     postDto.setUrl(imageDetails.get("url").toString());
 
-                    return getPost(postDto, category, user, post);
+                    return responsePostDto(getPost(postDto, category, user, post));
                 }
         ).orElseThrow(() -> new NoSuchElementException("Post Not Found "));
 
@@ -108,6 +131,8 @@ public class PostService implements PostInterface {
         post.setAppUser(user);
         return postRepo.save(post);
     }
+
+
 
     @Override
     public void deletePost(long id) {
