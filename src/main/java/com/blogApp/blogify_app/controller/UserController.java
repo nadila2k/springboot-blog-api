@@ -20,7 +20,7 @@ public class UserController {
 
     private final UserInterface userInterface;
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<ApiResponse> createUser(@RequestBody UserDto userDto) {
         try {
             AppUser user = userInterface.addUser(userDto);

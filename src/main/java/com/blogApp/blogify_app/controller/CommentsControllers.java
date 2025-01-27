@@ -12,8 +12,8 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("${api.prefix}/post")
-public class CommentsController {
+@RequestMapping("${api.prefix}/comments")
+public class CommentsControllers {
 
     private final CommentInterface commentInterface;
     @GetMapping

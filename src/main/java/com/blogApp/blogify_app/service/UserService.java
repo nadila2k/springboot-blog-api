@@ -5,6 +5,7 @@ import com.blogApp.blogify_app.model.AppUser;
 import com.blogApp.blogify_app.repo.UserRepo;
 import com.blogApp.blogify_app.service.serviceInterface.UserInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class UserService implements UserInterface {
 
+    private  final PasswordEncoder passwordEncoder;
     private final UserRepo userRepo;
 
     @Override
@@ -21,7 +23,11 @@ public class UserService implements UserInterface {
         if (userRepo.existsByEmail(userDto.getEmail())) {
            throw new IllegalArgumentException("Email is already in use");
         }
-        return userRepo.save(convertToAppUser(userDto));
+        AppUser user = new AppUser();
+        user.setUserName(userDto.getUserName());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        return userRepo.save(user);
     }
 
 
@@ -35,7 +41,7 @@ public class UserService implements UserInterface {
                     existingUser.setId(userDto.getId());
                     existingUser.setUserName(userDto.getUserName());
                     existingUser.setEmail(userDto.getEmail());
-                    existingUser.setPassword(userDto.getPassword());
+                    existingUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
                     return userRepo.save(existingUser);
                 })
                 .orElseThrow(() -> new NoSuchElementException("User Not Found"));

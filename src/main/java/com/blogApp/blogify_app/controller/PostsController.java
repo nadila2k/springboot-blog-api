@@ -18,7 +18,6 @@ import java.util.NoSuchElementException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/post")
-
 public class PostsController {
 
     private final PostInterface postInterface;
@@ -55,7 +54,7 @@ public class PostsController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/posts/{id}")
     public ResponseEntity<ApiResponse> deletePost(@PathVariable long id){
         try {
             postInterface.deletePost(id);
